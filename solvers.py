@@ -32,6 +32,14 @@ def gaussian_eliminate(aa, bb):
     for ii in range(0, aa_rows, 1):
         sol[ii, :] = sol[ii, :] / sol[ii, ii]
     
-    print("lower-triangular-shape form:\n", sol)
+    #print("lower-triangular-shape form:\n", sol)
     
-    return None
+    #Transformation to the final form:        
+    for ii in range(0, aa_rows, 1):
+        for kk in range(ii + 1, aa_columns, 1):
+            sol[ii, :] = sol[ii, :] - sol[ii, kk] * sol[kk, :]
+    sol_bb = sol[:, aa_columns]
+    
+    #print("\nfinal form:\n", sol)    
+    
+    return sol_bb
