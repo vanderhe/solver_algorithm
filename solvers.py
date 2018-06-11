@@ -21,9 +21,14 @@ def gaussian_eliminate(aa, bb):
     #Transformation to the lower-triangular-shape form:
     for ii in range(0, aa_rows, 1):
         for jj in range(ii + 1, aa_columns, 1):
-            var = (aa[jj, ii] / aa[ii, ii])
-            aa[jj, ii:] = aa[jj, ii:] - var * aa[ii, ii:]
-            bb[jj] = bb[jj] - var * bb[ii]
+            if aa[ii, ii] != 0:
+                var = (aa[jj, ii] / aa[ii, ii])
+                aa[jj, ii:] = aa[jj, ii:] - var * aa[ii, ii:]
+                bb[jj] = bb[jj] - var * bb[ii]
+            elif aa[ii, ii] == 0:
+                switch_var = np.array(aa[ii, :])
+                aa[ii, :] = aa[jj, :]
+                aa[jj, :] = switch_var
     
     #Stack aa and bb to one matrix:
     bb_shape = bb.reshape((-1,1))
