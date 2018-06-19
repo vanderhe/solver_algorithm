@@ -1,3 +1,6 @@
 .spyderproject
 __pycache__
 gaussian_elimination.ipynb
+input_rand.txt
+output.out
+

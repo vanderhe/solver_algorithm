@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 """Routines for solving a linear system of equations."""
 import numpy as np
+import random_matrix
 
 def gaussian_eliminate(aa, bb):
     """Solves a linear system of equations (Ax = b) by Gauss-elimination
@@ -55,34 +57,69 @@ def gaussian_eliminate(aa, bb):
 
     return sol
 
-#aa = np.array([[2.0, 4.0, 4.0], [5.0, 4.0, 2.0], [1.0, 2.0, -1.0]])
-#bb = np.array([1.0, 4.0, 2.0])
-#aa = np.array([[2.0, 4.0, 4.0], [1.0, 2.0, -1.0], [5.0, 4.0, 2.0]])
-#bb = np.array([1.0, 2.0, 4.0])
-#aa = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
-#bb = np.array([1.0, 2.0, 3.0])
+def random_matrix(numVars):
+    """Generates a random linear system of equations
 
-#Read matrices from file "input.in":
-file = open("input.in", "r")
-lines = file.readlines()
-#print("number of lines read:\n",lines)
-numberOfVars = int(lines[0].strip())
-aa = np.empty((numberOfVars, numberOfVars))
-bb_ma = np.empty((1,numberOfVars))
+    Args:
+        numVars: Number of variables, which defines the shape
 
-#Fill Matrix bb_ma with Numbers from input.in:
-lines_bb = lines[4].strip().split()
-for jj in range(0, numberOfVars, 1):
-        bb_ma[0, jj] = float(lines_bb[jj])
-bb = bb_ma[0, :]
+    Returns:
+        Random matrix rand_ma 
+    """
+    
+    #Generating matrices using numpy routines:
+    aa_rand = np.random.rand(numVars, numVars)
+    bb_rand = np.random.rand(numVars, 1)
 
-#Fill Matrix aa with Numbers from input.in:
-for ii in range(1, numberOfVars +1, 1):
-    for jj in range(0, numberOfVars, 1):
-        aa[ii -1, jj] = float(lines[ii].strip().split()[jj])
+    #Stack aa and bb to one matrix:
+    ma_rand = np.hstack([aa_rand, bb_rand])    
+    
+    print("obtained random matrix:\n", ma_rand)
+    
+    #Write obtained matrix into file "input_rand.txt":
+    np.savetxt("input_rand.txt", ma_rand)
+    
+    return ma_rand
+    
+#Generate random matrix and "input_rand.txt":
+random_matrix(3)
 
-print("matrix aa:\n", aa)
-print("\nmatrix bb:\n", bb, "\n")
+#Read matrices from file "input_rand.txt":
+file_rand = open("input_rand.txt", "r")
+lines_rand = file_rand.readlines()
+numberOfVars_rand = len(lines_rand)
+ma_in = np.ones((numberOfVars_rand, numberOfVars_rand +1))
+
+#Fill Matrix ma_in with Numbers from input.txt:
+for ii in range(0, numberOfVars_rand, 1):
+    for jj in range(0, numberOfVars_rand +1, 1):
+        ma_in[ii, jj] = float(lines_rand[ii].strip().split()[jj])
+print("obtained matrix of input_rand.txt:\n", ma_in)
+
+aa = ma_in[:, :numberOfVars_rand]
+bb = ma_in[:, numberOfVars_rand]
+
+##Read matrices from file "input.in":
+#file = open("input.in", "r")
+#lines = file.readlines()
+##print("number of lines read:\n",lines)
+#numberOfVars = int(lines[0].strip())
+#aa = np.empty((numberOfVars, numberOfVars))
+#bb_ma = np.empty((1,numberOfVars))
+#
+##Fill Matrix bb_ma with Numbers from input.in:
+#lines_bb = lines[4].strip().split()
+#for jj in range(0, numberOfVars, 1):
+#        bb_ma[0, jj] = float(lines_bb[jj])
+#bb = bb_ma[0, :]
+#
+##Fill Matrix aa with Numbers from input.in:
+#for ii in range(1, numberOfVars +1, 1):
+#    for jj in range(0, numberOfVars, 1):
+#        aa[ii -1, jj] = float(lines[ii].strip().split()[jj])
+
+print("obtained matrix aa:\n", aa)
+print("\nobtained matrix bb:\n", bb, "\n")
 
 #Solve linear equations system with method "gaussian_eliminate":
 sol = gaussian_eliminate(aa, bb)
