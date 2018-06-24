@@ -27,6 +27,14 @@ def main():
     xx_expected = None
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
     _check_result(xx_expected, xx_gauss)
+    
+    print("\nTest with random generated matrix") 
+    aa = np.random.rand(1000, 1000)
+    bb = np.random.rand(1000, 1)    
+    xx_expected = np.linalg.solve(aa, bb)
+    xx_gauss_whole = solvers.gaussian_eliminate(aa, bb)
+    xx_gauss = xx_gauss_whole[:, 1000]
+    _check_result(xx_expected, xx_gauss)
 
 
 def _check_result(expected, obtained):
